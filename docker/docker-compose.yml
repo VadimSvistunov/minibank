@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: "springpet"
+      POSTGRES_USER: "springpet"
+      POSTGRES_PASSWORD: "springpet"
+    ports:
+      - "5433:5432"
