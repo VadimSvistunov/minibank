@@ -1,6 +1,8 @@
 package by.svistunovvv.springpet.controller;
 
+import by.svistunovvv.springpet.model.Account;
 import by.svistunovvv.springpet.model.User;
+import by.svistunovvv.springpet.service.AccountService;
 import by.svistunovvv.springpet.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @ResponseBody
 public class UserController {
     private UserService service;
+    private AccountService accountService;
 
     @GetMapping("")
     public List<User> index() {
@@ -26,7 +29,9 @@ public class UserController {
 
     @PostMapping("")
     public String save(@RequestBody User user) {
-        service.save(user);
+        User createdUser = service.save(user);
+        Account account = Account.builder().amount((float)0).user(createdUser).primaryAccount(true).build();
+        accountService.save(account);
         return "Success save";
     }
 
