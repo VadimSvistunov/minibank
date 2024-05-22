@@ -1,10 +1,10 @@
 package by.svistunovvv.springpet.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,4 +23,6 @@ public class User {
     private String age;
     private String password;
     private Float accountAmount;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Account> accounts = new ArrayList<>();
 }
