@@ -4,6 +4,7 @@ import by.svistunovvv.springpet.model.User;
 import by.svistunovvv.springpet.repository.UserRepository;
 import by.svistunovvv.springpet.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return repository.findUserByEmail(email);
+        return repository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
     @Override
