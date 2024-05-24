@@ -3,9 +3,12 @@ package by.svistunovvv.springpet.auth;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +16,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "E3EB8E9529DE858F626E783F959BC";
+    private final String SECRET_KEY = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
     private final long EXPIRATION_DATE = 86_400_000;
 
     public String generateToken(String username) {
@@ -27,7 +30,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_DATE))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -59,5 +62,10 @@ public class JwtService {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
